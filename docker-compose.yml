@@ -1,0 +1,13 @@
+version: "3"
+services:
+  db:
+    image: "postgres:11"
+    container_name: "postgres_11"
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/home/roland/Development/Home/elixir-fsm/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+volumes:
+  dbdata:
