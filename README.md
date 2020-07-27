@@ -24,3 +24,5 @@ The state machine models a simple job worker system.
 * run `curl http://localhost:4000/update/${state_machine_id}?transition=done`
 * run `curl http://localhost:4000/delete/${state_machine_id}`
   * Note: this should fail because after the done transition the state machine has ceased to exist
+
+You can also run these commands with `./scripts/run.sh`.
