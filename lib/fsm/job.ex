@@ -2,7 +2,9 @@ defmodule Job do
   @behaviour :gen_statem
 
   def start_link do
-    :gen_statem.start_link( __MODULE__,:ok,[] )
+    id = Ecto.UUID.generate() |> String.to_atom()
+    {:ok, _pid} = :gen_statem.start_link({:local, id}, __MODULE__, :ok, [])
+    {:ok, id}
   end
 
   @impl :gen_statem
@@ -52,7 +54,11 @@ defmodule Job do
     {:next_state, :exit, data, [{:reply, from, {:ok, :exit}}]}
   end
 
+  def handle_event({:call, from}, :retrieve, state, data) do
+    {:next_state, state, data, [{:reply, from, {:ok, state}}]}
+  end
+
   def handle_event({:call, from}, _event, _content, data) do
-    {:keep_state, data, [{:reply, from, {:error, "invalid transition"}}]}
+    {:keep_state, data, [{:reply, from, {:error, :invalid_transition}}]}
   end
 end
