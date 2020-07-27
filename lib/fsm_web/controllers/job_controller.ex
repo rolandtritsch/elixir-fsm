@@ -47,8 +47,16 @@ defmodule FsmWeb.JobController do
             |> put_resp_content_type("text/plain")
             |> send_resp(200, Atom.to_string(state))
 
+          {:error, :invalid_transition} -> 
+            conn 
+            |> put_resp_content_type("text/plain")
+            |> send_resp(400, "invalid transition")
+
           error -> 
-            conn |> send_resp(400, "#{inspect(error)}")
+            conn 
+            |> put_resp_content_type("text/plain")
+            |> send_resp(400, "#{inspect(error)}")
+
         end
     end
   end
