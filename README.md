@@ -8,11 +8,12 @@ The state machine models a simple job worker system.
 
 ## How to build this?
 
-* install elixir
-* run `mix deps.get`
-* run `mix test`
-* run `mix compile`
-* run `mix phx.server`
+* create database directory with `mkdir data` and update `docker-compose.yml` accordingly
+* start the database with `docker-compose up -d`
+* install dependencies with `mix deps.get`
+* create and migrate your database with `mix ecto.setup`
+* install Node.js dependencies with `npm install` inside the `assets` directory
+* start Phoenix endpoint with `mix phx.server`
 
 ## How to use it?
 
