@@ -17,6 +17,10 @@ defmodule FsmWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/create", JobController, :create
+    get "/retrieve/:id", JobController, :retrieve
+    get "/update/:id", JobController, :update
+    get "/delete/:id", JobController, :delete
   end
 
   # Other scopes may use custom stacks.
