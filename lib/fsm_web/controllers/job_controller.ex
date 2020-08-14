@@ -2,80 +2,73 @@ defmodule FsmWeb.JobController do
   use FsmWeb, :controller
 
   def create(conn, _params) do
-    {:ok, id} = Job.start_link() 
+     {:ok, id} = PersistentJob.create() 
     
     conn
     |> put_resp_content_type("text/plain")
-    |> send_resp(201, Atom.to_string(id))
+    |> send_resp(201, id)
   end
 
   def retrieve(conn, %{"id" => id}) do
-    try do
-      String.to_existing_atom(id)
-    rescue
-      ArgumentError ->
-        conn 
+    case PersistentJob.retrieve(id) do
+      {:ok, state} -> 
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(200, state)
+        
+      {:error, :invalid_id} ->
+         conn 
         |> put_resp_content_type("text/plain")
         |> send_resp(400, "invalid id")
-    else
-      id ->
-        case :gen_statem.call(id, :retrieve) do
-          {:ok, state} -> 
-            conn
-            |> put_resp_content_type("text/plain")
-            |> send_resp(200, Atom.to_string(state))
-
-          error -> 
-            conn |> send_resp(400, "#{inspect(error)}")
-        end
+        
+      error ->
+         conn 
+        |> put_resp_content_type("text/plain")
+        |> send_resp(400, inspect(error))
     end
   end
 
   def update(conn, %{"id" => id, "transition" => transition}) do
-    try do
-      {String.to_existing_atom(id), String.to_existing_atom(transition)}
-    rescue
-      ArgumentError ->
-        conn 
+    target = PersistentJob.target(transition)
+    case PersistentJob.update(id, target) do
+      {:ok, state} -> 
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(200, state)
+        
+      {:error, :invalid_id} ->
+         conn 
         |> put_resp_content_type("text/plain")
         |> send_resp(400, "invalid id")
-    else
-      {id, transition} ->
-        case :gen_statem.call(id, transition) do
-          {:ok, state} -> 
-            conn
-            |> put_resp_content_type("text/plain")
-            |> send_resp(200, Atom.to_string(state))
-
-          {:error, :invalid_transition} -> 
-            conn 
-            |> put_resp_content_type("text/plain")
-            |> send_resp(400, "invalid transition")
-
-          error -> 
-            conn 
-            |> put_resp_content_type("text/plain")
-            |> send_resp(400, "#{inspect(error)}")
-
-        end
+        
+      {:error, :invalid_transition} ->
+         conn 
+        |> put_resp_content_type("text/plain")
+        |> send_resp(400, "invalid transition")
+        
+      error ->
+         conn 
+        |> put_resp_content_type("text/plain")
+        |> send_resp(400, inspect(error))
     end
   end
-
+  
   def delete(conn, %{"id" => id}) do
-    try do
-      String.to_existing_atom(id)
-    rescue
-      ArgumentError ->
-        conn 
+    case PersistentJob.delete(id) do
+      {:ok, _id} -> 
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(200, "deleted")
+        
+      {:error, :invalid_id} ->
+         conn 
         |> put_resp_content_type("text/plain")
         |> send_resp(400, "invalid id")
-    else
-      id ->
-        :ok = :gen_statem.stop(id)
-
-      conn
-      |> put_resp_content_type("text/plain")
-      |> send_resp(200, "deleted")
+        
+      error ->
+         conn 
+        |> put_resp_content_type("text/plain")
+        |> send_resp(400, inspect(error))
     end
   end
 end
