@@ -12,6 +12,8 @@ The state machine models a simple job worker system.
 * start the database with `docker-compose up -d`
 * install dependencies with `mix deps.get`
 * create and migrate your database with `mix ecto.setup`
+  * reset it with `mix ecto.reset`
+  * prefix `mix` with `MIX_ENV=test` to create/reset the test database
 * install Node.js dependencies with `npm install` inside the `assets` directory
 * start Phoenix endpoint with `mix phx.server`
 
