@@ -8,5 +8,5 @@ curl --write-out "\n" ${fsm}/retrieve/${id}
 curl --write-out "\n" ${fsm}/update/${id}?transition=done
 curl --write-out "\n" ${fsm}/retrieve/${id}
 curl --write-out "\n" ${fsm}/update/${id}?transition=done
-curl --write-out "\n" ${fsm}/retrieve/1234
+curl --write-out "\n" ${fsm}/retrieve/$(uuidgen)
 curl --write-out "\n" ${fsm}/delete/${id}
