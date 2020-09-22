@@ -4,8 +4,8 @@ defmodule Fsm.MixProject do
   def project do
     [
       app: :fsm,
-      version: "0.2.0",
-      elixir: "~> 1.7",
+      version: "0.3.0",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -33,8 +33,7 @@ defmodule Fsm.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ecto_sql, "~> 3.4"},
-      {:fsmx, "~> 0.2"},
+      {:ecto_fsm, "~> 0.2"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.4"},
