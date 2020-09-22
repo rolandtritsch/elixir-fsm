@@ -1,70 +1,63 @@
-defmodule PersistentJob do
-  use Ecto.Schema
-  alias Fsm.Repo
+defmodule PersistentJob do  
+  use Ecto.FSM
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @doc "New to Created"
+  @to [:created]
+  transition new({:create, _}, s) do
+    {:next_state, :created, s}
+  end  
 
-  schema "jobs" do
-    field :state, :string, default: "created"
+  @doc "Created to Initialized"
+  @to [:initialized]
+  transition created({:start, _}, s) do
+    {:next_state, :initialized, s}
+  end  
+
+  @doc "Created to Scheduled"
+  @to [:scheduled]
+  transition created({:schedule, _}, s) do
+    {:next_state, :scheduled, s}
+  end  
+
+  @doc "Scheduled to Initialized"
+  @to [:initialized]
+  transition scheduled({:start, _}, s) do
+    {:next_state, :initialized, s}
+  end  
+
+  @doc "Initialized to Running"
+  @to [:running]
+  transition initialized({:run, _}, s) do
+    {:next_state, :running, s}
+  end  
+
+  @doc "Running to Processing"
+  @to [:processing]
+  transition running({:process, _}, s) do
+    {:next_state, :processing, s}
+  end  
+
+  @doc "Running to Exited"
+  @to [:exited]
+  transition running({:done, _}, s) do
+    {:next_state, :exited, s}
   end
 
-  use Fsmx.Struct, transitions: %{
-    "created" => ["initialized", "scheduled"],
-    "scheduled" => "initialized",
-    "initialized" => "running",
-    "running" => ["processing", "exited"],
-    "processing" => ["running", "failed"],
-    "failed" => "exited"
-  }
+  @doc "Processing to Running"
+  @to [:running]
+  transition processing({:success, _}, s) do
+    {:next_state, :running, s}
+  end  
 
-  def create() do
-    job = %PersistentJob{}
-    {:ok, %{id: id}} = Repo.insert(job)
-    {:ok, id}
-  end
+  @doc "Processing to Failed"
+  @to [:failed]
+  transition processing({:failure, _}, s) do
+    {:next_state, :failed, s}
+  end  
 
-  def retrieve(id) do
-    case PersistentJob |> Repo.get(id) do
-      %{state: state} ->
-        {:ok, state}
-
-      _ ->
-        {:error, :invalid_id}
-    end
-  end
-
-  def update(id, state) do
-    case PersistentJob |> Repo.get(id) do
-      %PersistentJob{} = job ->
-        case Fsmx.transition_changeset(job, state) |> Repo.update() do
-          {:ok, _} ->
-            {:ok, state}
-
-          _ ->
-            {:error, :invalid_transition}
-        end
-      _ ->
-        {:error, :invalid_id}
-    end
-  end
-
-  def delete(id) do
-    case PersistentJob |> Repo.get(id) do
-      %PersistentJob{} = job ->
-        {:ok, _job} = Repo.delete(job)
-        {:ok, id}
-
-      _ ->
-        {:error, :invalid_id}
-    end
-  end
-
-  def target("schedule"), do: "scheduled"
-  def target("start"), do: "initialized"
-  def target("run"), do: "running"
-  def target("process"), do: "processing"
-  def target("success"), do: "running"
-  def target("failure"), do: "failed"
-  def target("done"), do: "exited"
-  def target(_), do: "unknown"  
+  @doc "Failed to Exited"
+  @to [:exited]
+  transition failed({:done, _}, s) do
+    {:next_state, :exited, s}
+  end  
 end
