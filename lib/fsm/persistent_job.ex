@@ -1,6 +1,55 @@
 defmodule PersistentJob do  
   use Ecto.FSM
+  alias Fsm.Repo
 
+  def create() do
+    job = PersistentJob.Schema.new()
+    {:ok, %{id: id}} = Repo.insert(job)    
+    {:ok, id}
+  end
+
+  def retrieve(id) do
+    case PersistentJob.Schema |> Repo.get(id) do
+      nil ->
+        {:error, :invalid_id}
+
+      job ->
+        {:ok, job |> Ecto.FSM.Machine.State.state_name() |> Atom.to_string()}
+    end
+  end
+
+  def update(id, transition) do
+    transition = transition |> String.to_atom()
+
+    case PersistentJob.Schema |> Repo.get(id) do
+      nil ->
+        {:error, :invalid_id}
+
+      job ->
+        case job |> Ecto.FSM.Machine.event({transition, nil}) do
+          {:error, :illegal_action} ->
+            {:error, :invalid_transition}
+            
+          {:ok, next_state} ->
+            {:ok, job} = next_state |> Repo.update()
+            {:ok, job |> Ecto.FSM.Machine.State.state_name() |> Atom.to_string()}
+        end
+    end
+  end
+  
+  def delete(id) do
+    case PersistentJob.Schema |> Repo.get(id) do
+      nil ->
+        {:error, :invalid_id}
+
+      job ->
+        {:ok, _job} = Repo.delete(job)
+        {:ok, id}
+    end
+  end
+
+  # ---
+  
   @doc "New to Created"
   @to [:created]
   transition new({:create, _}, s) do
@@ -59,5 +108,5 @@ defmodule PersistentJob do
   @to [:exited]
   transition failed({:done, _}, s) do
     {:next_state, :exited, s}
-  end  
+  end
 end
