@@ -29,8 +29,7 @@ defmodule FsmWeb.JobController do
   end
 
   def update(conn, %{"id" => id, "transition" => transition}) do
-    target = PersistentJob.target(transition)
-    case PersistentJob.update(id, target) do
+    case PersistentJob.update(id, transition) do
       {:ok, state} -> 
         conn
         |> put_resp_content_type("text/plain")
