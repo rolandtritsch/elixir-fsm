@@ -33,7 +33,8 @@ defmodule Fsm.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ecto_fsm, "~> 0.2"},
+      #{:ecto_fsm, "~> 0.2"},
+      {:ecto_fsm, git: "https://github.com/rolandtritsch/ecto_fsm.git"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.4"},

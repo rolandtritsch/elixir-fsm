@@ -12,6 +12,8 @@ curl --write-out "\n" ${fsm}/update/${id}?transition=process
 curl --write-out "\n" ${fsm}/retrieve/${id}
 curl --write-out "\n" ${fsm}/update/${id}?transition=success
 curl --write-out "\n" ${fsm}/retrieve/${id}
+curl --write-out "\n" ${fsm}/update/${id}?transition=done
+curl --write-out "\n" ${fsm}/retrieve/${id}
 curl --write-out "\n" ${fsm}/update/${id}?transition=hokuspokus
 curl --write-out "\n" ${fsm}/retrieve/$(uuidgen)
 curl --write-out "\n" ${fsm}/delete/${id}
