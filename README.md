@@ -28,3 +28,11 @@ The state machine models a simple job worker system.
   * Note: this should fail because after the done transition the state machine has ceased to exist
 
 You can also run these commands with `./scripts/run.sh`.
+
+## How to switch between implementations?
+
+* the repo features the following (tagged) implementations ...
+  * 0.1.0-gen_statem - using gen_statem
+  * 0.2.0-fsmx - using ecto/fsmx
+  * 0.3.0-ecto_fsm - using ecto_fsm
+* you can select one of these by checking out the tag and then build/run it as described above
