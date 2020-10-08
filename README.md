@@ -25,7 +25,7 @@ The state machine models a simple job worker system.
 * run `curl http://localhost:4000/retrieve/${state_machine_id}`
 * run `curl http://localhost:4000/update/${state_machine_id}?transition=done`
 * run `curl http://localhost:4000/delete/${state_machine_id}`
-  * Note: this should fail because after the done transition the state machine has ceased to exist
+  * note: this should fail because after the done transition the state machine has ceased to exist
 
 You can also run these commands with `./scripts/run.sh`.
 
@@ -36,3 +36,4 @@ You can also run these commands with `./scripts/run.sh`.
   * 0.2.0-fsmx - using ecto/fsmx
   * 0.3.0-ecto_fsm - using ecto_fsm
 * you can select one of these by checking out the tag and then build/run it as described above
+  * note: after checking out the tag/switching the implementation you need to reset the database(s) with `MIX_ENV=test mix ecto.reset` and `MIX_ENV=dev mix ecto.reset`
