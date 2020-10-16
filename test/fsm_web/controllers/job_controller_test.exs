@@ -1,47 +1,47 @@
 defmodule FsmWeb.JobControllerTest do
   use FsmWeb.ConnCase
   
-  test "GET /create", %{conn: conn} do
-    response = get(conn, "/create")
+  test "POST /api/create", %{conn: conn} do
+    response = post(conn, "/api/create")
     assert text_response(response, 201) =~ "-"
   end
 
-  test "GET /retrieve", %{conn: conn} do
+  test "GET /api/retrieve", %{conn: conn} do
     {:ok, id} = PersistentJob.create()
-    response = get(conn, "/retrieve/#{id}")
+    response = get(conn, "/api/retrieve/#{id}")
     assert text_response(response, 200) =~ "created"
   end
 
-  test "GET /update", %{conn: conn} do
+  test "PATCH /api/update", %{conn: conn} do
     {:ok, id} = PersistentJob.create()
-    response = get(conn, "/update/#{id}?transition=start")
+    response = patch(conn, "/api/update/#{id}?transition=start")
     assert text_response(response, 200) =~ "initialized"
   end
 
-  test "GET /delete", %{conn: conn} do
+  test "DELETE /api/delete", %{conn: conn} do
     {:ok, id} = PersistentJob.create()
-    response = get(conn, "/delete/#{id}")
+    response = delete(conn, "/api/delete/#{id}")
     assert text_response(response, 200) =~ "deleted"
   end
 
-  test "GET /update (invalid state)", %{conn: conn} do
+  test "PATCH /api/update (invalid state)", %{conn: conn} do
     {:ok, id} = PersistentJob.create()
-    response = get(conn, "/update/#{id}?transition=xxx")
+    response = patch(conn, "/api/update/#{id}?transition=xxx")
     assert response.status == 400
   end
 
-  test "GET /retrieve (invalid id)", %{conn: conn} do
-    response = get(conn, "/retrieve/#{Ecto.UUID.generate()}")
+  test "GET /api/retrieve (invalid id)", %{conn: conn} do
+    response = get(conn, "/api/retrieve/#{Ecto.UUID.generate()}")
     assert response.status == 400
   end
 
-  test "GET /update (invalid id)", %{conn: conn} do
-    response = get(conn, "/update/#{Ecto.UUID.generate()}?transition=xxx")
+  test "PATCH /api/update (invalid id)", %{conn: conn} do
+    response = patch(conn, "/api/update/#{Ecto.UUID.generate()}?transition=xxx")
     assert response.status == 400
   end
 
-  test "GET /delete (invalid id)", %{conn: conn} do
-    response = get(conn, "/delete/#{Ecto.UUID.generate()}")
+  test "DELETE /api/delete (invalid id)", %{conn: conn} do
+    response = delete(conn, "/api/delete/#{Ecto.UUID.generate()}")
     assert text_response(response, 400) =~ "invalid id"
   end
 end
