@@ -1,0 +1,26 @@
+{
+    "components": {
+        "responses": {},
+        "schemas": {}
+    },
+    "info": {
+        "contact": {
+            "email": "roland@tritsch.org",
+            "name": "Roland Tritsch",
+            "url": "https://github.com/rolandtritsch/elixir-fsm"
+        },
+        "description": "  An application to experiment with different FSM implementations.\n",
+        "title": "fsm",
+        "version": "0.3.0"
+    },
+    "openapi": "3.0.0",
+    "paths": {},
+    "security": [],
+    "servers": [
+        {
+            "url": "http://localhost:4000",
+            "variables": {}
+        }
+    ],
+    "tags": []
+}
