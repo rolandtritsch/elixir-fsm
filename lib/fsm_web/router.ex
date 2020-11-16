@@ -11,11 +11,12 @@ defmodule FsmWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug OpenApiSpex.Plug.PutApiSpec, module: FsmWeb.ApiSpec
   end
 
   scope "/", FsmWeb do
     pipe_through :browser
-
+    
     get "/", PageController, :index
   end
 
@@ -27,6 +28,12 @@ defmodule FsmWeb.Router do
     patch "/update/:id", JobController, :update
     delete "/delete/:id", JobController, :delete
   end
+
+  scope "/api" do
+    pipe_through :api
+    
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
+  end  
 
   # Enables LiveDashboard only for development
   #
