@@ -3,7 +3,7 @@
         "responses": {},
         "schemas": {
             "CreateResponse": {
-                "description": "Created a/the job.",
+                "description": "Return id of the created job.",
                 "example": {
                     "created": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
                 },
@@ -20,6 +20,43 @@
                 "title": "CreateResponse",
                 "type": "object",
                 "x-struct": "Elixir.FsmWeb.JobController.Schema.CreateResponse"
+            },
+            "ErrorResponse": {
+                "description": "Something went wrong. Return the reason.",
+                "example": {
+                    "error": "invalid id"
+                },
+                "properties": {
+                    "error": {
+                        "description": "Error",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "error"
+                ],
+                "title": "ErrorResponse",
+                "type": "object",
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.ErrorResponse"
+            },
+            "RetrieveResponse": {
+                "description": "Return the current status of the given job.",
+                "example": {
+                    "status": "started"
+                },
+                "properties": {
+                    "status": {
+                        "description": "Status",
+                        "pattern": "(started)|(initialized)|(scheduled)|(running)|(processing)|(failed)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status"
+                ],
+                "title": "RetrieveResponse",
+                "type": "object",
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.RetrieveResponse"
             }
         }
     },
@@ -39,7 +76,7 @@
             "post": {
                 "callbacks": {},
                 "deprecated": false,
-                "description": "Create a job. Return the job id.\n",
+                "description": "/create \n\nCreate a job. Return the job id.\n",
                 "operationId": "FsmWeb.JobController.create",
                 "parameters": [],
                 "responses": {
@@ -55,12 +92,55 @@
                     }
                 },
                 "security": [],
-                "summary": "Create a job. Return the job id.\n",
+                "summary": "/create ",
                 "tags": []
             }
         },
         "/api/delete/{id}": {},
-        "/api/retrieve/{id}": {},
+        "/api/retrieve/{id}": {
+            "get": {
+                "callbacks": {},
+                "deprecated": false,
+                "description": "/retrieve/:id\n\nRetrieve the current status of the given job.\n",
+                "operationId": "FsmWeb.JobController.retrieve",
+                "parameters": [
+                    {
+                        "description": "Id of the job",
+                        "in": "path",
+                        "name": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetrieveResponse"
+                                }
+                            }
+                        },
+                        "description": "Status"
+                    },
+                    "400": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Error"
+                    }
+                },
+                "security": [],
+                "summary": "/retrieve/:id",
+                "tags": []
+            }
+        },
         "/api/update/{id}": {}
     },
     "security": [],
