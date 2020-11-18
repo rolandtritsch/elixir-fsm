@@ -9,7 +9,7 @@
             "name": "Roland Tritsch",
             "url": "https://github.com/rolandtritsch/elixir-fsm"
         },
-        "description": "  An application to experiment with different FSM implementations.\n",
+        "description": "  https://github.com/rolandtritsch/elixir-fsm\n\n  An application to experiment with different FSM implementations.\n",
         "title": "fsm",
         "version": "0.3.0"
     },
