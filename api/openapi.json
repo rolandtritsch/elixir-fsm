@@ -10,7 +10,7 @@
                 "properties": {
                     "created": {
                         "description": "Created",
-                        "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+                        "format": "uuid",
                         "type": "string"
                     }
                 },
@@ -39,7 +39,7 @@
             "post": {
                 "callbacks": {},
                 "deprecated": false,
-                "description": "/create\n\nCreate a job. Return the job id.\n",
+                "description": "Create a job. Return the job id.\n",
                 "operationId": "FsmWeb.JobController.create",
                 "parameters": [],
                 "responses": {
@@ -55,7 +55,7 @@
                     }
                 },
                 "security": [],
-                "summary": "/create",
+                "summary": "Create a job. Return the job id.\n",
                 "tags": []
             }
         },

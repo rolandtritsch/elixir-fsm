@@ -14,7 +14,7 @@ defmodule FsmWeb.JobController do
             description: "Created a/the job.",
             type: :object,
             properties: %{
-              created: %OpenApiSpex.Schema{type: :string, description: "Created", pattern: ~r/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/}
+              created: %OpenApiSpex.Schema{type: :string, description: "Created", format: :uuid}
             },
             required: [:created],
             example: %{
@@ -25,8 +25,6 @@ defmodule FsmWeb.JobController do
   end
   
   @doc """
-  /create
-
   Create a job. Return the job id.
   """
   @doc responses: [
