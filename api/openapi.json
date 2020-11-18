@@ -1,7 +1,27 @@
 {
     "components": {
         "responses": {},
-        "schemas": {}
+        "schemas": {
+            "CreateResponse": {
+                "description": "Created a/the job.",
+                "example": {
+                    "created": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+                },
+                "properties": {
+                    "created": {
+                        "description": "Created",
+                        "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "created"
+                ],
+                "title": "CreateResponse",
+                "type": "object",
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.CreateResponse"
+            }
+        }
     },
     "info": {
         "contact": {
@@ -14,7 +34,35 @@
         "version": "0.3.0"
     },
     "openapi": "3.0.0",
-    "paths": {},
+    "paths": {
+        "/api/create": {
+            "post": {
+                "callbacks": {},
+                "deprecated": false,
+                "description": "/create\n\nCreate a job. Return the job id.\n",
+                "operationId": "FsmWeb.JobController.create",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        },
+                        "description": "Created"
+                    }
+                },
+                "security": [],
+                "summary": "/create",
+                "tags": []
+            }
+        },
+        "/api/delete/{id}": {},
+        "/api/retrieve/{id}": {},
+        "/api/update/{id}": {}
+    },
     "security": [],
     "servers": [
         {
