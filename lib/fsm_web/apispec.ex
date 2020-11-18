@@ -13,6 +13,8 @@ defmodule FsmWeb.ApiSpec do
       info: %Info{
         title: Application.spec(:fsm, :description) |> to_string(),
         description: """
+          https://github.com/rolandtritsch/elixir-fsm
+
           An application to experiment with different FSM implementations.
         """,
         version: Application.spec(:fsm, :vsn) |> to_string(),
