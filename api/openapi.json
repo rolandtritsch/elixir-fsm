@@ -167,7 +167,7 @@
             "get": {
                 "callbacks": {},
                 "deprecated": false,
-                "description": "/retrieve/:id\n\nRetrieve the current status of the given job.\n",
+                "description": "/retrieve/{id}\n\nRetrieve the current status of the given job.\n",
                 "operationId": "FsmWeb.JobController.retrieve",
                 "parameters": [
                     {
@@ -203,7 +203,7 @@
                     }
                 },
                 "security": [],
-                "summary": "/retrieve/:id",
+                "summary": "/retrieve/{id}",
                 "tags": [
                     "jobs"
                 ]

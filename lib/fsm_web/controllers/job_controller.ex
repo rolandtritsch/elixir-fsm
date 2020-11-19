@@ -94,11 +94,13 @@ defmodule FsmWeb.JobController do
   end
 
   @doc """
-  /retrieve/:id
+  /retrieve/{id}
 
   Retrieve the current status of the given job.
   """
-  @doc parameters: [id: [in: :path, name: :id, schema: Schema.Id]]
+  @doc parameters: [
+    id: [in: :path, schema: Schema.Id]
+  ]
   @doc responses: [
     ok: {"Current state", "text/plain", Schema.Id},
     bad_request: {"Error", "text/plain", Schema.Error}
@@ -128,8 +130,8 @@ defmodule FsmWeb.JobController do
   Transition the given job to the next state (by applying the given transition).
   """
   @doc parameters: [
-    id: [in: :path, name: :id, schema: Schema.Id],
-    transition: [in: :query, name: :transition, schema: Schema.Transition]
+    id: [in: :path, schema: Schema.Id],
+    transition: [in: :query, schema: Schema.Transition]
   ]
   @doc responses: [
     ok: {"New state", "text/plain", Schema.State},
@@ -164,7 +166,9 @@ defmodule FsmWeb.JobController do
 
   Delete the given job.
   """
-  @doc parameters: [id: [in: :path, name: :id, schema: Schema.Id]]
+  @doc parameters: [
+    id: [in: :path, schema: Schema.Id]
+  ]
   @doc responses: [
     ok: {"Id", "text/plain", Schema.Id},
     bad_request: {"Error", "text/plain", Schema.Error}
