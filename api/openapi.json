@@ -112,7 +112,9 @@
                 },
                 "security": [],
                 "summary": "/create ",
-                "tags": []
+                "tags": [
+                    "jobs"
+                ]
             }
         },
         "/api/delete/{id}": {
@@ -156,7 +158,9 @@
                 },
                 "security": [],
                 "summary": "/delete/:id",
-                "tags": []
+                "tags": [
+                    "jobs"
+                ]
             }
         },
         "/api/retrieve/{id}": {
@@ -200,7 +204,9 @@
                 },
                 "security": [],
                 "summary": "/retrieve/:id",
-                "tags": []
+                "tags": [
+                    "jobs"
+                ]
             }
         },
         "/api/update/{id}": {
@@ -253,7 +259,9 @@
                 },
                 "security": [],
                 "summary": "/update/:id&transition=:transition",
-                "tags": []
+                "tags": [
+                    "jobs"
+                ]
             }
         }
     },
@@ -264,5 +272,9 @@
             "variables": {}
         }
     ],
-    "tags": []
+    "tags": [
+        {
+            "name": "jobs"
+        }
+    ]
 }

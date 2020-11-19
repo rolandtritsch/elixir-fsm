@@ -1,5 +1,5 @@
 defmodule FsmWeb.ApiSpec do
-  alias OpenApiSpex.{Info, OpenApi, Paths, Server, Contact}
+  alias OpenApiSpex.{Info, OpenApi, Paths, Server, Contact, Tag}
   alias FsmWeb.{Endpoint, Router}
   @behaviour OpenApi
 
@@ -25,7 +25,10 @@ defmodule FsmWeb.ApiSpec do
         }
       },
       # Populate the paths from a phoenix router
-      paths: Paths.from_router(Router)
+      paths: Paths.from_router(Router),
+      tags: [
+        %Tag{name: "jobs"}
+      ]
     }
     |> OpenApiSpex.resolve_schema_modules()
   end

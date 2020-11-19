@@ -2,6 +2,7 @@ defmodule FsmWeb.JobController do
   @moduledoc """
   All endpoints to manage jobs.
   """
+  @moduledoc tags: ["jobs"]
   
   use FsmWeb, :controller
   use OpenApiSpex.Controller
