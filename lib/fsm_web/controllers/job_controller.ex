@@ -85,7 +85,9 @@ defmodule FsmWeb.JobController do
       type: :string,
       required: :true,
       description: "Id of the job",
-      example: "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+      examples: [
+        "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+      ]
     ]
   ]
   @doc responses: [
@@ -122,14 +124,19 @@ defmodule FsmWeb.JobController do
       type: :string,
       required: :true,
       description: "Id of the job",
-      example: "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+      examples: [
+        "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+      ]
     ],
     transition: [
       in: :query,
       type: :string,
       required: :true,
       description: "Transition to apply",
-      example: "run"
+      examples: [
+        "run",
+        "process"
+      ]
     ]
   ]
   @doc responses: [
@@ -171,7 +178,9 @@ defmodule FsmWeb.JobController do
       type: :string,
       required: :true,
       description: "Id of the job",
-      example: "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+      examples: [
+        "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+      ]
     ]
   ]
   @doc responses: [
