@@ -23,30 +23,30 @@ defmodule FsmWeb.JobController do
       })
     end
 
-    defmodule CreateResponse do
+    defmodule IdResponse do
       OpenApiSpex.schema(%{
-            description: "Return id of the created job.",
+            description: "Return an id.",
             type: :object,
             properties: %{
-              created: %OpenApiSpex.Schema{type: :string, description: "Created", format: :uuid}
+              id: %OpenApiSpex.Schema{type: :string, description: "Id", format: :uuid}
             },
-            required: [:created],
+            required: [:id],
             example: %{
-              "created" => "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+              "id" => "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
             }
       })
     end
 
-    defmodule RetrieveResponse do
+    defmodule StateResponse do
       OpenApiSpex.schema(%{
-            description: "Return the current status of the given job.",
+            description: "Return a state.",
             type: :object,
             properties: %{
-              status: %OpenApiSpex.Schema{type: :string, description: "Status", pattern: ~r/(started)|(initialized)|(scheduled)|(running)|(processing)|(failed)/}
+              state: %OpenApiSpex.Schema{type: :string, description: "State", pattern: ~r/(started)|(initialized)|(scheduled)|(running)|(processing)|(failed)/}
             },
-            required: [:status],
+            required: [:state],
             example: %{
-              "status" => "started"
+              "state" => "started"
             }
       })
     end
@@ -58,7 +58,7 @@ defmodule FsmWeb.JobController do
   Create a job. Return the job id.
   """
   @doc responses: [
-    created: {"Created", "text/plain", Schema.CreateResponse}
+    created: {"Created", "text/plain", Schema.IdResponse}
   ]
   def create(conn, _params) do
      {:ok, id} = PersistentJob.create() 
@@ -77,7 +77,7 @@ defmodule FsmWeb.JobController do
     path: [in: :path, type: :string, required: :true, description: "Id of the job"]
   ]
   @doc responses: [
-    ok: {"Status", "text/plain", Schema.RetrieveResponse},
+    ok: {"Current state", "text/plain", Schema.IdResponse},
     bad_request: {"Error", "text/plain", Schema.ErrorResponse}
   ]
   def retrieve(conn, %{"id" => id}) do
@@ -99,7 +99,19 @@ defmodule FsmWeb.JobController do
     end
   end
 
-  @doc false
+  @doc """
+  /update/:id&transition=:transition
+
+  Transition the given job to the next state (by applying the given transition).
+  """
+  @doc parameters: [
+    path: [in: :path, type: :string, required: :true, description: "Id of the job"],
+    transition: [in: :query, type: :string, required: :true, description: "Transition to apply"]
+  ]
+  @doc responses: [
+    ok: {"New state", "text/plain", Schema.StateResponse},
+    bad_request: {"Error", "text/plain", Schema.ErrorResponse}
+  ]
   def update(conn, %{"id" => id, "transition" => transition}) do
     case PersistentJob.update(id, transition) do
       {:ok, state} -> 

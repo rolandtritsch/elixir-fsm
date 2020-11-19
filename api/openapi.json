@@ -2,25 +2,6 @@
     "components": {
         "responses": {},
         "schemas": {
-            "CreateResponse": {
-                "description": "Return id of the created job.",
-                "example": {
-                    "created": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-                },
-                "properties": {
-                    "created": {
-                        "description": "Created",
-                        "format": "uuid",
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "created"
-                ],
-                "title": "CreateResponse",
-                "type": "object",
-                "x-struct": "Elixir.FsmWeb.JobController.Schema.CreateResponse"
-            },
             "ErrorResponse": {
                 "description": "Something went wrong. Return the reason.",
                 "example": {
@@ -39,24 +20,43 @@
                 "type": "object",
                 "x-struct": "Elixir.FsmWeb.JobController.Schema.ErrorResponse"
             },
-            "RetrieveResponse": {
-                "description": "Return the current status of the given job.",
+            "IdResponse": {
+                "description": "Return an id.",
                 "example": {
-                    "status": "started"
+                    "id": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
                 },
                 "properties": {
-                    "status": {
-                        "description": "Status",
+                    "id": {
+                        "description": "Id",
+                        "format": "uuid",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "title": "IdResponse",
+                "type": "object",
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.IdResponse"
+            },
+            "StateResponse": {
+                "description": "Return a state.",
+                "example": {
+                    "state": "started"
+                },
+                "properties": {
+                    "state": {
+                        "description": "State",
                         "pattern": "(started)|(initialized)|(scheduled)|(running)|(processing)|(failed)",
                         "type": "string"
                     }
                 },
                 "required": [
-                    "status"
+                    "state"
                 ],
-                "title": "RetrieveResponse",
+                "title": "StateResponse",
                 "type": "object",
-                "x-struct": "Elixir.FsmWeb.JobController.Schema.RetrieveResponse"
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.StateResponse"
             }
         }
     },
@@ -84,7 +84,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CreateResponse"
+                                    "$ref": "#/components/schemas/IdResponse"
                                 }
                             }
                         },
@@ -119,11 +119,11 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/RetrieveResponse"
+                                    "$ref": "#/components/schemas/IdResponse"
                                 }
                             }
                         },
-                        "description": "Status"
+                        "description": "Current state"
                     },
                     "400": {
                         "content": {
@@ -141,7 +141,59 @@
                 "tags": []
             }
         },
-        "/api/update/{id}": {}
+        "/api/update/{id}": {
+            "patch": {
+                "callbacks": {},
+                "deprecated": false,
+                "description": "/update/:id&transition=:transition\n\nTransition the given job to the next state (by applying the given transition).\n",
+                "operationId": "FsmWeb.JobController.update",
+                "parameters": [
+                    {
+                        "description": "Id of the job",
+                        "in": "path",
+                        "name": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Transition to apply",
+                        "in": "query",
+                        "name": "transition",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StateResponse"
+                                }
+                            }
+                        },
+                        "description": "New state"
+                    },
+                    "400": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Error"
+                    }
+                },
+                "security": [],
+                "summary": "/update/:id&transition=:transition",
+                "tags": []
+            }
+        }
     },
     "security": [],
     "servers": [
