@@ -105,8 +105,9 @@
                 "parameters": [
                     {
                         "description": "Id of the job",
+                        "example": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22",
                         "in": "path",
-                        "name": "path",
+                        "name": "id",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -149,6 +150,7 @@
                 "parameters": [
                     {
                         "description": "Id of the job",
+                        "example": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22",
                         "in": "path",
                         "name": "id",
                         "required": true,
@@ -193,8 +195,9 @@
                 "parameters": [
                     {
                         "description": "Id of the job",
+                        "example": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22",
                         "in": "path",
-                        "name": "path",
+                        "name": "id",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -202,6 +205,7 @@
                     },
                     {
                         "description": "Transition to apply",
+                        "example": "run",
                         "in": "query",
                         "name": "transition",
                         "required": true,
