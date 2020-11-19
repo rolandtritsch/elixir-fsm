@@ -6,6 +6,8 @@ defmodule FsmWeb.JobController do
   use FsmWeb, :controller
   use OpenApiSpex.Controller
 
+  # plug OpenApiSpex.Plug.CastAndValidate, json_render_error_v2: true
+
   defmodule Schema do
     require OpenApiSpex
 
@@ -42,7 +44,11 @@ defmodule FsmWeb.JobController do
             description: "Return a state.",
             type: :object,
             properties: %{
-              state: %OpenApiSpex.Schema{type: :string, description: "State", pattern: ~r/(started)|(initialized)|(scheduled)|(running)|(processing)|(failed)/}
+              state: %OpenApiSpex.Schema{
+                type: :string,
+                description: "State",
+                pattern: ~r/(started)|(initialized)|(scheduled)|(running)|(processing)|(failed)/
+              }
             },
             required: [:state],
             example: %{
@@ -74,7 +80,13 @@ defmodule FsmWeb.JobController do
   Retrieve the current status of the given job.
   """
   @doc parameters: [
-    path: [in: :path, type: :string, required: :true, description: "Id of the job"]
+    id: [
+      in: :path,
+      type: :string,
+      required: :true,
+      description: "Id of the job",
+      example: "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+    ]
   ]
   @doc responses: [
     ok: {"Current state", "text/plain", Schema.IdResponse},
@@ -105,8 +117,20 @@ defmodule FsmWeb.JobController do
   Transition the given job to the next state (by applying the given transition).
   """
   @doc parameters: [
-    path: [in: :path, type: :string, required: :true, description: "Id of the job"],
-    transition: [in: :query, type: :string, required: :true, description: "Transition to apply"]
+    id: [
+      in: :path,
+      type: :string,
+      required: :true,
+      description: "Id of the job",
+      example: "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+    ],
+    transition: [
+      in: :query,
+      type: :string,
+      required: :true,
+      description: "Transition to apply",
+      example: "run"
+    ]
   ]
   @doc responses: [
     ok: {"New state", "text/plain", Schema.StateResponse},
@@ -142,7 +166,13 @@ defmodule FsmWeb.JobController do
   Delete the given job.
   """
   @doc parameters: [
-    path: [in: :path, type: :string, required: :true, description: "Id of the job"]
+    id: [
+      in: :path,
+      type: :string,
+      required: :true,
+      description: "Id of the job",
+      example: "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
+    ]
   ]
   @doc responses: [
     ok: {"Id", "text/plain", Schema.IdResponse},

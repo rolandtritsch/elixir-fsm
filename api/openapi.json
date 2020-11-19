@@ -150,7 +150,7 @@
                     {
                         "description": "Id of the job",
                         "in": "path",
-                        "name": "path",
+                        "name": "id",
                         "required": true,
                         "schema": {
                             "type": "string"
