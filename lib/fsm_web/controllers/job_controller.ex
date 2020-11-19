@@ -11,7 +11,7 @@ defmodule FsmWeb.JobController do
   defmodule Schema do
     require OpenApiSpex
 
-    defmodule ErrorResponse do
+    defmodule Error do
       OpenApiSpex.schema(%{
             description: "Something went wrong. Return the reason.",
             type: :object,
@@ -25,9 +25,9 @@ defmodule FsmWeb.JobController do
       })
     end
 
-    defmodule IdResponse do
+    defmodule Id do
       OpenApiSpex.schema(%{
-            description: "Return an id.",
+            description: "An id.",
             type: :object,
             properties: %{
               id: %OpenApiSpex.Schema{type: :string, description: "Id", format: :uuid}
@@ -39,9 +39,9 @@ defmodule FsmWeb.JobController do
       })
     end
 
-    defmodule StateResponse do
+    defmodule State do
       OpenApiSpex.schema(%{
-            description: "Return a state.",
+            description: "A state.",
             type: :object,
             properties: %{
               state: %OpenApiSpex.Schema{
@@ -56,6 +56,24 @@ defmodule FsmWeb.JobController do
             }
       })
     end
+
+    defmodule Transition do
+      OpenApiSpex.schema(%{
+            description: "A tranisition.",
+            type: :object,
+            properties: %{
+              state: %OpenApiSpex.Schema{
+                type: :string,
+                description: "Transition",
+                pattern: ~r/(start)|(schedule)|(run)|(process)|(success)|(failure)|(done)/
+              }
+            },
+            required: [:transition],
+            example: %{
+              "transition" => "run"
+            }
+      })
+    end
   end
   
   @doc """
@@ -64,7 +82,7 @@ defmodule FsmWeb.JobController do
   Create a job. Return the job id.
   """
   @doc responses: [
-    created: {"Created", "text/plain", Schema.IdResponse}
+    created: {"Created", "text/plain", Schema.Id}
   ]
   def create(conn, _params) do
      {:ok, id} = PersistentJob.create() 
@@ -79,20 +97,10 @@ defmodule FsmWeb.JobController do
 
   Retrieve the current status of the given job.
   """
-  @doc parameters: [
-    id: [
-      in: :path,
-      type: :string,
-      required: :true,
-      description: "Id of the job",
-      examples: [
-        "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-      ]
-    ]
-  ]
+  @doc parameters: [id: [in: :path, name: :id, schema: Schema.Id]]
   @doc responses: [
-    ok: {"Current state", "text/plain", Schema.IdResponse},
-    bad_request: {"Error", "text/plain", Schema.ErrorResponse}
+    ok: {"Current state", "text/plain", Schema.Id},
+    bad_request: {"Error", "text/plain", Schema.Error}
   ]
   def retrieve(conn, %{"id" => id}) do
     case PersistentJob.retrieve(id) do
@@ -119,29 +127,12 @@ defmodule FsmWeb.JobController do
   Transition the given job to the next state (by applying the given transition).
   """
   @doc parameters: [
-    id: [
-      in: :path,
-      type: :string,
-      required: :true,
-      description: "Id of the job",
-      examples: [
-        "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-      ]
-    ],
-    transition: [
-      in: :query,
-      type: :string,
-      required: :true,
-      description: "Transition to apply",
-      examples: [
-        "run",
-        "process"
-      ]
-    ]
+    id: [in: :path, name: :id, schema: Schema.Id],
+    transition: [in: :query, name: :transition, schema: Schema.Transition]
   ]
   @doc responses: [
-    ok: {"New state", "text/plain", Schema.StateResponse},
-    bad_request: {"Error", "text/plain", Schema.ErrorResponse}
+    ok: {"New state", "text/plain", Schema.State},
+    bad_request: {"Error", "text/plain", Schema.Error}
   ]
   def update(conn, %{"id" => id, "transition" => transition}) do
     case PersistentJob.update(id, transition) do
@@ -172,20 +163,10 @@ defmodule FsmWeb.JobController do
 
   Delete the given job.
   """
-  @doc parameters: [
-    id: [
-      in: :path,
-      type: :string,
-      required: :true,
-      description: "Id of the job",
-      examples: [
-        "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-      ]
-    ]
-  ]
+  @doc parameters: [id: [in: :path, name: :id, schema: Schema.Id]]
   @doc responses: [
-    ok: {"Id", "text/plain", Schema.IdResponse},
-    bad_request: {"Error", "text/plain", Schema.ErrorResponse}
+    ok: {"Id", "text/plain", Schema.Id},
+    bad_request: {"Error", "text/plain", Schema.Error}
   ]
   def delete(conn, %{"id" => id}) do
     case PersistentJob.delete(id) do

@@ -2,7 +2,7 @@
     "components": {
         "responses": {},
         "schemas": {
-            "ErrorResponse": {
+            "Error": {
                 "description": "Something went wrong. Return the reason.",
                 "example": {
                     "error": "invalid id"
@@ -16,12 +16,12 @@
                 "required": [
                     "error"
                 ],
-                "title": "ErrorResponse",
+                "title": "Error",
                 "type": "object",
-                "x-struct": "Elixir.FsmWeb.JobController.Schema.ErrorResponse"
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.Error"
             },
-            "IdResponse": {
-                "description": "Return an id.",
+            "Id": {
+                "description": "An id.",
                 "example": {
                     "id": "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
                 },
@@ -35,12 +35,12 @@
                 "required": [
                     "id"
                 ],
-                "title": "IdResponse",
+                "title": "Id",
                 "type": "object",
-                "x-struct": "Elixir.FsmWeb.JobController.Schema.IdResponse"
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.Id"
             },
-            "StateResponse": {
-                "description": "Return a state.",
+            "State": {
+                "description": "A state.",
                 "example": {
                     "state": "started"
                 },
@@ -54,9 +54,28 @@
                 "required": [
                     "state"
                 ],
-                "title": "StateResponse",
+                "title": "State",
                 "type": "object",
-                "x-struct": "Elixir.FsmWeb.JobController.Schema.StateResponse"
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.State"
+            },
+            "Transition": {
+                "description": "A tranisition.",
+                "example": {
+                    "transition": "run"
+                },
+                "properties": {
+                    "state": {
+                        "description": "Transition",
+                        "pattern": "(start)|(schedule)|(run)|(process)|(success)|(failure)|(done)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "transition"
+                ],
+                "title": "Transition",
+                "type": "object",
+                "x-struct": "Elixir.FsmWeb.JobController.Schema.Transition"
             }
         }
     },
@@ -84,7 +103,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/IdResponse"
+                                    "$ref": "#/components/schemas/Id"
                                 }
                             }
                         },
@@ -104,15 +123,12 @@
                 "operationId": "FsmWeb.JobController.delete",
                 "parameters": [
                     {
-                        "description": "Id of the job",
-                        "examples": [
-                            "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-                        ],
+                        "description": "",
                         "in": "path",
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Id"
                         }
                     }
                 ],
@@ -121,7 +137,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/IdResponse"
+                                    "$ref": "#/components/schemas/Id"
                                 }
                             }
                         },
@@ -131,7 +147,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/Error"
                                 }
                             }
                         },
@@ -151,15 +167,12 @@
                 "operationId": "FsmWeb.JobController.retrieve",
                 "parameters": [
                     {
-                        "description": "Id of the job",
-                        "examples": [
-                            "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-                        ],
+                        "description": "",
                         "in": "path",
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Id"
                         }
                     }
                 ],
@@ -168,7 +181,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/IdResponse"
+                                    "$ref": "#/components/schemas/Id"
                                 }
                             }
                         },
@@ -178,7 +191,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/Error"
                                 }
                             }
                         },
@@ -198,28 +211,21 @@
                 "operationId": "FsmWeb.JobController.update",
                 "parameters": [
                     {
-                        "description": "Id of the job",
-                        "examples": [
-                            "6a2f41a3-c54c-fce8-32d2-0324e1c32e22"
-                        ],
+                        "description": "",
                         "in": "path",
                         "name": "id",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Id"
                         }
                     },
                     {
-                        "description": "Transition to apply",
-                        "examples": [
-                            "run",
-                            "process"
-                        ],
+                        "description": "",
                         "in": "query",
                         "name": "transition",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Transition"
                         }
                     }
                 ],
@@ -228,7 +234,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/StateResponse"
+                                    "$ref": "#/components/schemas/State"
                                 }
                             }
                         },
@@ -238,7 +244,7 @@
                         "content": {
                             "text/plain": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/Error"
                                 }
                             }
                         },
