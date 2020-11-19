@@ -96,7 +96,50 @@
                 "tags": []
             }
         },
-        "/api/delete/{id}": {},
+        "/api/delete/{id}": {
+            "delete": {
+                "callbacks": {},
+                "deprecated": false,
+                "description": "/delete/:id\n\nDelete the given job.\n",
+                "operationId": "FsmWeb.JobController.delete",
+                "parameters": [
+                    {
+                        "description": "Id of the job",
+                        "in": "path",
+                        "name": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdResponse"
+                                }
+                            }
+                        },
+                        "description": "Id"
+                    },
+                    "400": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Error"
+                    }
+                },
+                "security": [],
+                "summary": "/delete/:id",
+                "tags": []
+            }
+        },
         "/api/retrieve/{id}": {
             "get": {
                 "callbacks": {},

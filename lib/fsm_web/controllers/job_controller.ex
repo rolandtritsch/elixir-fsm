@@ -136,13 +136,24 @@ defmodule FsmWeb.JobController do
     end
   end
 
-  @doc false
+  @doc """
+  /delete/:id
+
+  Delete the given job.
+  """
+  @doc parameters: [
+    path: [in: :path, type: :string, required: :true, description: "Id of the job"]
+  ]
+  @doc responses: [
+    ok: {"Id", "text/plain", Schema.IdResponse},
+    bad_request: {"Error", "text/plain", Schema.ErrorResponse}
+  ]
   def delete(conn, %{"id" => id}) do
     case PersistentJob.delete(id) do
-      {:ok, _id} -> 
+      {:ok, id} -> 
         conn
         |> put_resp_content_type("text/plain")
-        |> send_resp(:ok, "deleted")
+        |> send_resp(:ok, id)
         
       {:error, :invalid_id} ->
          conn 

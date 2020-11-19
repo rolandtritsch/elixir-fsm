@@ -21,7 +21,7 @@ defmodule FsmWeb.JobControllerTest do
   test "DELETE /api/delete", %{conn: conn} do
     {:ok, id} = PersistentJob.create()
     response = delete(conn, "/api/delete/#{id}")
-    assert text_response(response, 200) =~ "deleted"
+    assert text_response(response, 200) =~ id
   end
 
   test "PATCH /api/update (invalid state)", %{conn: conn} do
