@@ -3,7 +3,7 @@
         "responses": {},
         "schemas": {
             "Error": {
-                "description": "Edit. Something went wrong. Return the reason.",
+                "description": "Something went wrong. Return the reason.",
                 "example": {
                     "error": "invalid id"
                 },
